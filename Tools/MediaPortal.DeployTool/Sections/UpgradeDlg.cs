@@ -199,10 +199,10 @@ namespace MediaPortal.DeployTool.Sections
       if (InstallationProperties.Instance.Get("InstallType") != "tvserver_master")
       {
         // install includes MP so check skin choice
-        return DialogFlowHandler.Instance.GetDialogInstance(DialogType.SkinChoice);
+        return DialogFlowHandler.Instance.GetDialogInstance(DialogType.MPSettings);
       }
       // tv server only install so no need for skin choice
-      return DialogFlowHandler.Instance.GetDialogInstance(DialogType.Installation);
+      return DialogFlowHandler.Instance.GetDialogInstance(DialogType.TvServerSettings);
     }
 
     public override bool SettingsValid()

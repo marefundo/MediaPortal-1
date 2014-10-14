@@ -129,6 +129,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUISudoku", "WindowPlugins\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.GUIPlugins", "WindowPlugins\Common.GUIPlugins\Common.GUIPlugins.csproj", "{03FEC69F-6D10-46FB-A0CA-4D266E4A21E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WatchDogService.Interface", "..\Common-MP-TVE3\WatchDogService.Interface\WatchDogService.Interface.csproj", "{837CE7EA-60D4-4217-8D38-A8B5E6E1DB22}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -303,6 +305,10 @@ Global
 		{03FEC69F-6D10-46FB-A0CA-4D266E4A21E2}.Debug|x86.Build.0 = Debug|x86
 		{03FEC69F-6D10-46FB-A0CA-4D266E4A21E2}.Release|x86.ActiveCfg = Release|x86
 		{03FEC69F-6D10-46FB-A0CA-4D266E4A21E2}.Release|x86.Build.0 = Release|x86
+		{837CE7EA-60D4-4217-8D38-A8B5E6E1DB22}.Debug|x86.ActiveCfg = Debug|x86
+		{837CE7EA-60D4-4217-8D38-A8B5E6E1DB22}.Debug|x86.Build.0 = Debug|x86
+		{837CE7EA-60D4-4217-8D38-A8B5E6E1DB22}.Release|x86.ActiveCfg = Release|x86
+		{837CE7EA-60D4-4217-8D38-A8B5E6E1DB22}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
