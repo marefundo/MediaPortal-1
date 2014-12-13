@@ -1285,7 +1285,7 @@ namespace MediaPortal.Util
 
     public static string SecondsToHMSString(TimeSpan timespan)
     {
-      return SecondsToHMSString(timespan.Seconds);
+      return SecondsToHMSString(Convert.ToInt32(timespan.TotalSeconds));
     }
 
     public static string SecondsToHMSString(int lSeconds)
@@ -2561,7 +2561,6 @@ namespace MediaPortal.Util
           return false;
         }
 
-        Log.Debug("Util: FileDelete {0} successful.", strFile);
         return true;
       }
       catch (Exception ex)
