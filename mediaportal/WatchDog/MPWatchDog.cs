@@ -197,12 +197,12 @@ namespace WatchDog
       
       if (_watchdogtargetDir == string.Empty)
       {
-        zipFile = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) 
-          + "\\MediaPortal-Logs\\MediaPortalLogs_[date]__[time].zip";
+        zipFile = string.Format("{0}\\MediaPortal-Logs\\{1}_MediaPortalLogs_[date]__[time].zip",
+          Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), Environment.MachineName);
       }
       else
       {
-        zipFile = _watchdogtargetDir + "\\MediaPortalLogs_[date]__[time].zip";
+        zipFile = string.Format("{0}\\{1}_MediaPortalLogs_[date]__[time].zip", _watchdogtargetDir, Environment.MachineName);
       }
       
       if (!ParseCommandLine())
@@ -647,8 +647,8 @@ namespace WatchDog
 
     private void btnZipFileReset_Click(object sender, EventArgs e)
     {
-      zipFile = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)
-         + "\\MediaPortal-Logs\\MediaPortalLogs_[date]__[time].zip";
+      zipFile = string.Format("{0}\\MediaPortal-Logs\\{1}_MediaPortalLogs_[date]__[time].zip", 
+        Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), Environment.MachineName);
       tbZipFile.Text = zipFile;
     }
 
@@ -672,6 +672,30 @@ namespace WatchDog
     {
       TVServerManager mngr = new TVServerManager();
       mngr.ClearTVserverLogs();
+    }
+
+    private void menuRebootTvServer_Click(object sender, EventArgs e)
+    {
+      string hostName;
+      using (Settings xmlreader = new MPSettings())
+      {
+        hostName = xmlreader.GetValueAsString("tvservice", "hostname", string.Empty);
+      }
+
+      if (hostName == string.Empty)
+      {
+        return;
+      }
+
+      string msg = string.Format("Do you want to restart {0}?", hostName);
+
+      var result = MessageBox.Show(msg, "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+      if (result == DialogResult.Yes)
+      {
+        TVServerManager mngr = new TVServerManager();
+        mngr.RebootTvServer();
+      }
     }
   }
 }
