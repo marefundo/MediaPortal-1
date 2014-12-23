@@ -52,6 +52,9 @@ namespace WatchDog
       this.menuItemClearTVserverLogs = new System.Windows.Forms.MenuItem();
       this.menuItem10 = new System.Windows.Forms.MenuItem();
       this.menuItemWOLTvServer = new System.Windows.Forms.MenuItem();
+      this.menuRebootTvServer = new System.Windows.Forms.MenuItem();
+      this.menuShutdownTvServer = new System.Windows.Forms.MenuItem();
+      this.menuPowerOffTvServer = new System.Windows.Forms.MenuItem();
       this.menuItem9 = new System.Windows.Forms.MenuItem();
       this.menuItemClearEventLogs = new System.Windows.Forms.MenuItem();
       this.menuItemClearMPlogs = new System.Windows.Forms.MenuItem();
@@ -78,7 +81,7 @@ namespace WatchDog
       this.settingsGroup.Controls.Add(this.logDirLabel);
       this.settingsGroup.Location = new System.Drawing.Point(12, 12);
       this.settingsGroup.Name = "settingsGroup";
-      this.settingsGroup.Size = new System.Drawing.Size(410, 86);
+      this.settingsGroup.Size = new System.Drawing.Size(486, 86);
       this.settingsGroup.TabIndex = 2;
       this.settingsGroup.TabStop = false;
       this.settingsGroup.Text = "Settings";
@@ -124,7 +127,7 @@ namespace WatchDog
       this.ExportLogsRadioButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
       this.ExportLogsRadioButton.Location = new System.Drawing.Point(12, 268);
       this.ExportLogsRadioButton.Name = "ExportLogsRadioButton";
-      this.ExportLogsRadioButton.Size = new System.Drawing.Size(389, 17);
+      this.ExportLogsRadioButton.Size = new System.Drawing.Size(470, 20);
       this.ExportLogsRadioButton.TabIndex = 8;
       this.ExportLogsRadioButton.TabStop = true;
       this.ExportLogsRadioButton.Text = "Export all currently present logs from MediaPortal and TV Server";
@@ -138,7 +141,7 @@ namespace WatchDog
       this.label1.Location = new System.Drawing.Point(12, 124);
       this.label1.Name = "label1";
       this.label1.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
-      this.label1.Size = new System.Drawing.Size(410, 39);
+      this.label1.Size = new System.Drawing.Size(486, 53);
       this.label1.TabIndex = 1;
       this.label1.Text = "This will start MediaPortal using the default skin, and only plugins which were p" +
     "art of the release version you installed. No extensions will be loaded.";
@@ -150,7 +153,7 @@ namespace WatchDog
       this.SafeModeRadioButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
       this.SafeModeRadioButton.Location = new System.Drawing.Point(12, 104);
       this.SafeModeRadioButton.Name = "SafeModeRadioButton";
-      this.SafeModeRadioButton.Size = new System.Drawing.Size(221, 17);
+      this.SafeModeRadioButton.Size = new System.Drawing.Size(266, 20);
       this.SafeModeRadioButton.TabIndex = 0;
       this.SafeModeRadioButton.TabStop = true;
       this.SafeModeRadioButton.Text = "Report a Bug to Team MediaPortal";
@@ -258,6 +261,34 @@ namespace WatchDog
       this.menuItemWOLTvServer.Text = "Wake On TvServer";
       this.menuItemWOLTvServer.Click += new System.EventHandler(this.menuItemWOLTvServer_Click);
       // 
+
+      // menuItem10
+      // 
+      this.menuItem10.Index = 4;
+      this.menuItem10.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuRebootTvServer,
+            this.menuShutdownTvServer,
+            this.menuPowerOffTvServer});
+      this.menuItem10.Text = "Power Management";
+      // 
+      // menuRebootTvServer
+      // 
+      this.menuRebootTvServer.Index = 0;
+      this.menuRebootTvServer.Text = "Reboot TvServer";
+	  this.menuRebootTvServer.Click += new System.EventHandler(this.menuRebootTvServer_Click);
+      // 
+      // menuShutdownTvServer
+      // 
+      this.menuShutdownTvServer.Index = 1;
+      this.menuShutdownTvServer.Text = "Shutdown TvServer";
+      this.menuShutdownTvServer.Click += new System.EventHandler(this.menuShutdownTvServer_Click);
+      // 
+      // menuPowerOffTvServer
+      // 
+      this.menuPowerOffTvServer.Index = 2;
+      this.menuPowerOffTvServer.Text = "Power Off TvServer";
+      this.menuPowerOffTvServer.Click += new System.EventHandler(this.menuPowerOffTvServer_Click);
+      // 
       // menuItem9
       // 
       this.menuItem9.Index = 1;
@@ -293,9 +324,9 @@ namespace WatchDog
       // 
       // statusBar
       // 
-      this.statusBar.Location = new System.Drawing.Point(0, 344);
+      this.statusBar.Location = new System.Drawing.Point(0, 358);
       this.statusBar.Name = "statusBar";
-      this.statusBar.Size = new System.Drawing.Size(434, 20);
+      this.statusBar.Size = new System.Drawing.Size(510, 20);
       this.statusBar.TabIndex = 6;
       this.statusBar.Text = "Status: Idle";
       // 
@@ -320,7 +351,7 @@ namespace WatchDog
       this.NormalModeRadioButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
       this.NormalModeRadioButton.Location = new System.Drawing.Point(12, 186);
       this.NormalModeRadioButton.Name = "NormalModeRadioButton";
-      this.NormalModeRadioButton.Size = new System.Drawing.Size(325, 17);
+      this.NormalModeRadioButton.Size = new System.Drawing.Size(390, 20);
       this.NormalModeRadioButton.TabIndex = 1;
       this.NormalModeRadioButton.TabStop = true;
       this.NormalModeRadioButton.Text = "Report a Bug to a Plugin Developer or Skin Designer";
@@ -329,7 +360,7 @@ namespace WatchDog
       // ProceedButton
       // 
       this.ProceedButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-      this.ProceedButton.Location = new System.Drawing.Point(334, 315);
+      this.ProceedButton.Location = new System.Drawing.Point(410, 329);
       this.ProceedButton.Name = "ProceedButton";
       this.ProceedButton.Size = new System.Drawing.Size(75, 23);
       this.ProceedButton.TabIndex = 8;
@@ -345,7 +376,7 @@ namespace WatchDog
       this.label2.Location = new System.Drawing.Point(12, 206);
       this.label2.Name = "label2";
       this.label2.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
-      this.label2.Size = new System.Drawing.Size(398, 27);
+      this.label2.Size = new System.Drawing.Size(474, 41);
       this.label2.TabIndex = 2;
       this.label2.Text = "Besides setting the log level to \"debug\", this option will start MediaPortal as c" +
     "onfigured, using all extensions you have installed.";
@@ -358,7 +389,7 @@ namespace WatchDog
       this.label3.Location = new System.Drawing.Point(12, 288);
       this.label3.Name = "label3";
       this.label3.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
-      this.label3.Size = new System.Drawing.Size(410, 24);
+      this.label3.Size = new System.Drawing.Size(486, 38);
       this.label3.TabIndex = 9;
       this.label3.Text = "If MediaPortal crashes unexpectedly, or if you can not reproduce an issue nicely," +
     " then this option will simply export all the currently available log files.";
@@ -368,7 +399,7 @@ namespace WatchDog
       this.AcceptButton = this.ProceedButton;
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(434, 364);
+      this.ClientSize = new System.Drawing.Size(510, 378);
       this.Controls.Add(this.label3);
       this.Controls.Add(this.ExportLogsRadioButton);
       this.Controls.Add(this.label2);
@@ -427,5 +458,8 @@ namespace WatchDog
     private System.Windows.Forms.MenuItem menuItemClearTVserverLogs;
     private System.Windows.Forms.MenuItem menuItem10;
     private System.Windows.Forms.MenuItem menuItemWOLTvServer;
+    private System.Windows.Forms.MenuItem menuRebootTvServer;
+    private System.Windows.Forms.MenuItem menuShutdownTvServer;
+    private System.Windows.Forms.MenuItem menuPowerOffTvServer;
   }
 }
