@@ -1247,7 +1247,7 @@ namespace TvPlugin
       Log.Info("Remote control:master server :{0}", RemoteControl.HostName);
     }
 
-    private static void HandleWakeUpTvServer()
+    public static void HandleWakeUpTvServer()
     {
       bool isWakeOnLanEnabled;
       bool isAutoMacAddressEnabled;

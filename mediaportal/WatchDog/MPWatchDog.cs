@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -35,6 +36,7 @@ using WatchDog.Properties;
 using Settings = MediaPortal.Profile.Settings;
 using System.ServiceProcess;
 using System.Security.Principal;
+
 
 namespace WatchDog
 {
@@ -205,6 +207,12 @@ namespace WatchDog
         zipFile = string.Format("{0}\\{1}_MediaPortalLogs_[date]__[time].zip", _watchdogtargetDir, Environment.MachineName);
       }
       
+      string tvPlugin = Config.GetFolder(Config.Dir.Plugins) + "\\Windows\\TvPlugin.dll";
+      if (!File.Exists(tvPlugin))
+      {
+        menuItem14.Enabled = false;
+      }
+
       if (!ParseCommandLine())
       {
         Application.Exit();
@@ -695,6 +703,25 @@ namespace WatchDog
       {
         TVServerManager mngr = new TVServerManager();
         mngr.RebootTvServer();
+      }
+    }
+
+    private void menuItemWOLTvServer_Click(object sender, EventArgs e)
+    {
+      try
+      {
+        string tvPlugin = Config.GetFolder(Config.Dir.Plugins) + "\\Windows\\TvPlugin.dll";
+        Assembly assem = Assembly.LoadFrom(tvPlugin);
+        var theType = assem.GetType("TvPlugin.TVHome");
+        var c = Activator.CreateInstance(theType);
+        var method = theType.GetMethod("HandleWakeUpTvServer");
+        method.Invoke(c, new object[] { });
+
+        MessageBox.Show("Done", "Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show("Error", "Status", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
   }
