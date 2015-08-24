@@ -736,14 +736,19 @@ namespace WatchDog
 
             if (!wakeOnLanManager.SendWakeOnLanPacket(hwAddress, IPAddress.Broadcast))
             {
-              Log.Debug("WOLMgr: FAILED to send the first wake-on-lan packet!");
+              Log.Debug("WOLMgr: FAILED to send the wake-on-lan packet!");
             }
-
+            else
+            {
+              Log.Debug("WOLMgr: Sent packet to {0}", macAddress);
+            }
 
           }
           catch (Exception ex)
           {
             Log.Error("WOL - Failed to start the TV server - {0}", ex.Message);
+            MessageBox.Show("Failed to start the TV server", "Status", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
           }
             
           MessageBox.Show("Done", "Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
