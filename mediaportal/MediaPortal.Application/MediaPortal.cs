@@ -1227,9 +1227,12 @@ public class MediaPortalApp : D3D, IRender
     CheckSkinVersion();
     using (Settings xmlreader = new MPSettings())
     {
-      var startFullscreen = !WindowedOverride && (FullscreenOverride || xmlreader.GetValueAsBool("general", "startfullscreen", false));
-      Windowed = !startFullscreen;
       _keepstartfullscreen = xmlreader.GetValueAsBool("general", "keepstartfullscreen", false);
+      var startFullscreen = !WindowedOverride && (FullscreenOverride || xmlreader.GetValueAsBool("general", "startfullscreen", false));
+      if (!_keepstartfullscreen)
+      {
+        Windowed = !startFullscreen;
+      }
     }
 
     DoStartupJobs();
@@ -3956,7 +3959,10 @@ public class MediaPortalApp : D3D, IRender
 
         // toggle between windowed and fullscreen mode
         case Action.ActionType.ACTION_TOGGLE_WINDOWED_FULLSCREEN:
-          ToggleFullscreen();
+          if (!_keepstartfullscreen)
+          {
+            ToggleFullscreen();
+          }
           return;
 
         // mute or unmute audio
