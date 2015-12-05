@@ -283,6 +283,18 @@ ShowUninstDetails show
   ${EndIf}
 !macroend
 
+!macro un.Fonts
+  ; used for Default and Titan Skin Font
+  StrCpy $FONT_DIR $FONTS
+  !insertmacro RemoveTTFFont "Lato-Medium.ttf"
+  !insertmacro RemoveTTFFont "Lato-Light.ttf"
+  !insertmacro RemoveTTFFont "TitanSmall.ttf"
+  !insertmacro RemoveTTFFont "Titan.ttf"
+  !insertmacro RemoveTTFFont "TitanLight.ttf"
+  !insertmacro RemoveTTFFont "TitanMedium.ttf"
+  SendMessage ${HWND_BROADCAST} ${WM_FONTCHANGE} 0 0 /TIMEOUT=1000
+!macroend
+
 Function RunUninstaller
 
 !ifndef GIT_BUILD
@@ -402,6 +414,10 @@ Section "MediaPortal core files (required)" SecCore
   File /nonfatal /r /x .git "${MEDIAPORTAL.BASE}\thumbs\*"
 ### AUTO-GENERATED   UNINSTALLATION CODE   END ###
 
+  ; remve Default and DefautWide skins (were used before 1.13)
+  RMDir /r "$MPdir.Skin\Default"
+  RMDir /r "$MPdir.Skin\DefaultWide"
+
   ; create empty folders
   SetOutPath "$MPdir.Config"
   CreateDirectory "$MPdir.Config"
@@ -508,6 +524,7 @@ Section "MediaPortal core files (required)" SecCore
   SetOutPath "$MPdir.Base\"
   File "${git_ROOT}\Packages\BASS.2.4.10\bass.dll"
   File "${git_ROOT}\Packages\BASS.NET.2.4.10.3\lib\net40\Bass.Net.dll"
+  File "${git_ROOT}\Packages\System.Management.Automation.6.1.7601.17515\lib\net40\System.Management.Automation.dll"
   ; Bass Addons
   SetOutPath "$MPdir.Base\"
   File "${git_ROOT}\Packages\bass.asio.1.3.0.2\bassasio.dll"
@@ -583,9 +600,20 @@ Section "MediaPortal core files (required)" SecCore
     !insertmacro InstallLib REGDLL NOTSHARED NOREBOOT_NOTPROTECTED "${git_DirectShowFilters}\MPAudioRenderer\bin\${BUILD_TYPE}\mpaudiorenderer.ax"                "$MPdir.Base\mpaudiorenderer.ax"         "$MPdir.Base"
   ${EndIf}
 
+  ; delete font for proper reinstallation for Default and Titan Skin Font
+  !insertmacro un.Fonts
+  Delete "$FONT\TitanSmall.ttf"
+  Delete "$FONT\Titan.ttf"
+  Delete "$FONT\TitanLight.ttf"
+  Delete "$FONT\TitanMedium.ttf"
+  Delete "$FONT\Lato-Medium.ttf"
+  Delete "$FONT\Lato-Light.ttf"
+
   ; used for Default and Titan Skin Font
   StrCpy $FONT_DIR $FONTS
-  !insertmacro InstallTTFFont "${MEDIAPORTAL.BASE}\skin\DefaultWide\MPDefaultFonts\MediaPortalDefault.ttf"
+
+  !insertmacro InstallTTFFont "${MEDIAPORTAL.BASE}\skin\DefaultWideHD\MPDefaultFonts\Lato-Medium.ttf"
+  !insertmacro InstallTTFFont "${MEDIAPORTAL.BASE}\skin\DefaultWideHD\MPDefaultFonts\Lato-Light.ttf"
   !insertmacro InstallTTFFont "${MEDIAPORTAL.BASE}\skin\Titan\Fonts\TitanSmall.ttf"
   !insertmacro InstallTTFFont "${MEDIAPORTAL.BASE}\skin\Titan\Fonts\Titan.ttf"
   !insertmacro InstallTTFFont "${MEDIAPORTAL.BASE}\skin\Titan\Fonts\TitanLight.ttf"
@@ -670,6 +698,7 @@ SectionEnd
   Delete "$MPdir.Base\Dxerr9.dll"
   Delete "$MPdir.Base\mpcSubs.dll"
   Delete "$MPdir.Base\MiniDisplayLibrary.dll"
+  Delete "$MPdir.Base\System.Management.Automation.dll"
   ; iMON VFD/LCD
   Delete "$MPdir.Base\iMONDisplay.dll"
   Delete "$MPdir.Base\iMONDisplayWrapper.dll"

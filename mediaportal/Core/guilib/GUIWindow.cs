@@ -251,6 +251,7 @@ namespace MediaPortal.GUI.Library
 
     private VisualEffect _showAnimation = new VisualEffect(); // for dialogs
     private VisualEffect _closeAnimation = new VisualEffect();
+    public static readonly SynchronizationContext _mainThreadContext = SynchronizationContext.Current;
 
     #endregion
 
@@ -473,7 +474,11 @@ namespace MediaPortal.GUI.Library
       }
 
       // else load xml file now
-      LoadSkin();
+      GUIWindow._mainThreadContext.Send(delegate
+      {
+        LoadSkin();
+      }, null);
+
       if (!_windowAllocated)
       {
         AllocResources();
@@ -494,7 +499,14 @@ namespace MediaPortal.GUI.Library
       String threadName = Thread.CurrentThread.Name;
       if (threadName != "MPMain" && threadName != "Config Main")
       {
-        Log.Error("LoadSkin: Running on wrong thread - StackTrace: '{0}'", Environment.StackTrace);
+        if (threadName != null)
+        {
+          Log.Error("LoadSkin: Running on wrong thread name [{0}] - StackTrace: '{1}'", threadName, Environment.StackTrace);
+        }
+        else
+        {
+          Log.Error("LoadSkin: Running on wrong thread - StackTrace: '{0}'", Environment.StackTrace);
+        }
       }
 
       _lastSkin = GUIGraphicsContext.Skin;
@@ -518,6 +530,7 @@ namespace MediaPortal.GUI.Library
       //string strReferenceFile = _windowXmlFileName.Substring(0, iPos);
       _windowXmlFileName = GUIGraphicsContext.GetThemedSkinFile(_windowXmlFileName.Substring(_windowXmlFileName.LastIndexOf("\\")));
       string strReferenceFile = GUIGraphicsContext.GetThemedSkinFile(@"\references.xml");
+
       GUIControlFactory.LoadReferences(strReferenceFile);
 
       try
@@ -685,7 +698,7 @@ namespace MediaPortal.GUI.Library
             }
           }
         }
-        
+
         _rememberLastFocusedControl = false;
         if (GUIGraphicsContext.AllowRememberLastFocusedItem)
         {
@@ -861,7 +874,8 @@ namespace MediaPortal.GUI.Library
         if (xmlNodeList != null)
           foreach (XmlNode node in xmlNodeList)
           {
-            string[] tokens = node.InnerText.Split(':');
+            // Split only fisrt ':' otherwise full path can like (C:\) will be split too
+            string[] tokens = node.InnerText.Split(new[] { ':' }, 2);
 
             if (tokens.Length < 2)
             {
@@ -1058,7 +1072,10 @@ namespace MediaPortal.GUI.Library
     {
       if (_isSkinLoaded && (_lastSkin != GUIGraphicsContext.Skin))
       {
-        LoadSkin();
+        GUIWindow._mainThreadContext.Send(delegate
+        {
+          LoadSkin();
+        }, null);
       }
 
       if (_rememberLastFocusedControl && _rememberLastFocusedControlId >= 0)
@@ -1186,7 +1203,12 @@ namespace MediaPortal.GUI.Library
         }
 
         Dispose();
-        LoadSkin();
+
+        GUIWindow._mainThreadContext.Send(delegate
+        {
+          LoadSkin();
+        }, null);
+
         HashSet<int> faultyControl = new HashSet<int>();
         // tell every control we're gonna alloc the resources next
         for (int i = 0; i < Children.Count; i++)
@@ -1730,7 +1752,11 @@ namespace MediaPortal.GUI.Library
               }
               else
               {
-                LoadSkin();
+                GUIWindow._mainThreadContext.Send(delegate
+                {
+                  LoadSkin();
+                }, null);
+
                 if (!_windowAllocated)
                 {
                   AllocResources();
@@ -1867,6 +1893,10 @@ namespace MediaPortal.GUI.Library
           {
             _previousFocusedControlId = id;
           }
+        }
+        catch (ThreadAbortException)
+        {
+          Log.Debug("OnMessage.ThreadAbortException exception.");
         }
         catch (Exception ex)
         {

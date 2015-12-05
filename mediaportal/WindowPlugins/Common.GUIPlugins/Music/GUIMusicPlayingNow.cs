@@ -67,6 +67,7 @@ namespace MediaPortal.GUI.Music
       LBL_UP_NEXT = 20,
       VUMETER_LEFT = 999,
       VUMETER_RIGHT = 998,
+      LABEL_ROW1 = 10,
     }
 
     #endregion
@@ -253,7 +254,23 @@ namespace MediaPortal.GUI.Music
       CurrentTrackFileName = filename;
       GetTrackTags();
 
-      CurrentThumbFileName = GUIMusicBaseWindow.GetCoverArt(false, CurrentTrackFileName, CurrentTrackTag);
+      if (g_Player.IsRadio)
+      {
+
+        string strLogo = GUIPropertyManager.GetProperty("#Play.Current.Thumb");
+        if (!string.IsNullOrEmpty(strLogo))
+        {
+          CurrentThumbFileName = strLogo;
+        }
+        else
+        {
+          CurrentThumbFileName = string.Empty;
+        }
+      }
+      else
+      {
+        CurrentThumbFileName = GUIMusicBaseWindow.GetCoverArt(false, CurrentTrackFileName, CurrentTrackTag);
+      }
 
       if (string.IsNullOrEmpty(CurrentThumbFileName))
         // no LOCAL Thumb found because user has bad settings -> check if there is a folder.jpg in the share
@@ -285,8 +302,6 @@ namespace MediaPortal.GUI.Music
         Log.Debug("GUIMusicPlayingNow: Do Last.FM lookup for similar trracks");
         UpdateSimilarTracks(CurrentTrackFileName);
       }
-
-
     }
 
     #endregion
@@ -391,6 +406,35 @@ namespace MediaPortal.GUI.Music
               //  break;
           }
           break;
+
+        case Action.ActionType.ACTION_NEXT_AUDIO:
+          {
+            if (g_Player.AudioStreams > 1)
+            {
+              //_showStatus = true;
+              //_timeStatusShowTime = (DateTime.Now.Ticks / 10000);
+              GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_LABEL_SET, GetID, 0,
+                                              (int)ControlIDs.LABEL_ROW1, 0, 0, null);
+              g_Player.SwitchToNextAudio();
+
+              String language = g_Player.AudioLanguage(g_Player.CurrentAudioStream);
+              String languageType = g_Player.AudioType(g_Player.CurrentAudioStream);
+              if (languageType == Strings.Unknown || string.IsNullOrEmpty(languageType))
+              {
+                msg.Label = string.Format("{0} ({1}/{2})", language,
+                                          g_Player.CurrentAudioStream + 1, g_Player.AudioStreams);
+              }
+              else
+              {
+                msg.Label = string.Format("{0} [{1}] ({2}/{3})", language, languageType.TrimEnd(),
+                                          g_Player.CurrentAudioStream + 1, g_Player.AudioStreams);
+              }
+
+              OnMessage(msg);
+              Log.Info("GUIMusicPlayingNow: switched audio to {0}", msg.Label);
+            }
+          }
+          break;
       }
     }
 
@@ -466,6 +510,11 @@ namespace MediaPortal.GUI.Music
       }
 
       UpdateImagePathContainer();
+
+      if (g_Player.Playing && g_Player.IsRadio)
+      {
+        PlaylistPlayer.Reset();
+      }
 
       if (g_Player.Playing)
       {
@@ -856,11 +905,6 @@ namespace MediaPortal.GUI.Music
 
     private void FlipPictures()
     {
-      if (g_Player.currentFileName == string.Empty)
-      {
-        return;
-      }
-
       if (ImgCoverArt != null)
       {
         if (ImagePathContainer.Count > 1)
@@ -947,7 +991,7 @@ namespace MediaPortal.GUI.Music
 
     private void UpdateTrackInfo()
     {
-      if (PreviousTrackTag == null)
+      if (PreviousTrackTag == null || CurrentTrackTag == null)
       {
         _trackChanged = true;
       }
